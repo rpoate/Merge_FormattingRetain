@@ -86,7 +86,7 @@ namespace Merge_Formatting
 
             this.htmlEditControl1.DocumentHTML = newDoc.Body.InnerHtml;
 
-            mergedPerformed |= true;
+            mergedPerformed = true;
         }
 
         private HtmlElement FindLowestChild(HtmlElement element)
