@@ -1,4 +1,6 @@
 
+using Zoople;
+
 namespace Merge_Formatting
 {
     public partial class Form1 : Form
@@ -21,7 +23,27 @@ namespace Merge_Formatting
 
             this.htmlEditControl1.DocumentHTML = "<p>Dear <a data-merge=\"Salutation\" href=\"#\"><strong>Salutation</strong></a>,</p><p>Please find a quote for <a data-merge=\"Company\" href=\"#\">Company</a>&nbsp;attached</p><p>Our records show that your email address is registered as <a data-merge=\"Email\" href=\"#\">Email</a></p><p>regards</p><p><strong>Some Other Company</strong></p>";
 
+            this.htmlEditControl1.CancellableUserInteraction += HtmlEditControl1_CancellableUserInteraction;
             this.htmlEditControl1.Focus();
+        }
+
+        private void HtmlEditControl1_CancellableUserInteraction(object sender, Zoople.CancellableUserInteractionEventsArgs e)
+        {
+            if (e.InteractionType == Zoople.EditorUIEvents.onmouseup || e.InteractionType == Zoople.EditorUIEvents.ondblclick)
+            {
+                HtmlElement element = this.htmlEditControl1.FindParentElementOfType("a");
+
+                if (element != null)
+                {
+                    e.Cancel = true; // cancel the double click event
+
+                    dynamic oRange;
+                    oRange = ((dynamic)(this.htmlEditControl1.Document.DomDocument)).selection.createRange();
+
+                    oRange.moveToElementText(this.htmlEditControl1.CurrentWindowsFormsElement.DomElement);
+                    oRange.select();
+                }
+            }
         }
 
         private void ResetButton_Click(object? sender, EventArgs e)
