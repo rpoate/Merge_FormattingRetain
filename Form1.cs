@@ -5,6 +5,8 @@ namespace Merge_Formatting
 {
     public partial class Form1 : Form
     {
+        private Boolean mergedPerformed;
+
         public Form1()
         {
             InitializeComponent();
@@ -29,6 +31,8 @@ namespace Merge_Formatting
 
         private void HtmlEditControl1_CancellableUserInteraction(object sender, Zoople.CancellableUserInteractionEventsArgs e)
         {
+            if (mergedPerformed) return;
+
             if (e.InteractionType == Zoople.EditorUIEvents.onmouseup || e.InteractionType == Zoople.EditorUIEvents.ondblclick)
             {
                 HtmlElement element = this.htmlEditControl1.FindParentElementOfType("a");
@@ -49,7 +53,8 @@ namespace Merge_Formatting
         private void ResetButton_Click(object? sender, EventArgs e)
         {
             this.htmlEditControl1.DocumentHTML = "<p>Dear <a data-merge=\"Salutation\" href=\"#\"><strong>Salutation</strong></a>,</p><p>Please find a quote for <a data-merge=\"Company\" href=\"#\">Company</a>&nbsp;attached</p><p>Our records show that your email address is registered as <a data-merge=\"Email\" href=\"#\">Email</a></p><p>regards</p><p><strong>Some Other Company</strong></p>";
-
+             
+            mergedPerformed = false; 
         }
 
         private void PerformMergeButton_Click(object? sender, EventArgs e)
@@ -80,6 +85,8 @@ namespace Merge_Formatting
             }
 
             this.htmlEditControl1.DocumentHTML = newDoc.Body.InnerHtml;
+
+            mergedPerformed |= true;
         }
 
         private HtmlElement FindLowestChild(HtmlElement element)
